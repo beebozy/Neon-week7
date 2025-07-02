@@ -6,32 +6,32 @@ module.exports = {
   },
   pancakeFactory: {
     curvestand: '',
-    neondevnet: '',
+    neondevnet: '0xe972AC3Bc587A9772B0E4C8236e815639ae842A7',
     neonmainnet: ''
   },
   pancakeRouter: {
     curvestand: '',
-    neondevnet: '',
+    neondevnet: '0xBC60Eec776C91D44995E5763FEe4A2a7a14e2fFE',
     neonmainnet: ''
   },
   token_A: {
     curvestand: '',
-    neondevnet: '',
+    neondevnet: '0x748e0220746A11E55ecC938012AA555aE5a4366a',
     neonmainnet: ''
   },
   token_B: {
     curvestand: '',
-    neondevnet: '',
+    neondevnet: '0xbf980b326d4Ed7dF8933abab6eF5c22539132413',
     neonmainnet: ''
   },
   token_Av2: {
     curvestand: '',
-    neondevnet: '',
+    neondevnet: '0x748e0220746A11E55ecC938012AA555aE5a4366a',
     neonmainnet: ''
   },
   token_Bv2: {
     curvestand: '',
-    neondevnet: '',
+    neondevnet: '0x748e0220746A11E55ecC938012AA555aE5a4366a',
     neonmainnet: ''
   }
 };

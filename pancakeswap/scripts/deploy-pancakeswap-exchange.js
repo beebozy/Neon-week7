@@ -76,14 +76,14 @@ async function deployPancakeswapExchange(deployer) {
   return { pancakeFactoryAddress, pancakeRouterAddress, WNEONAddress, NEONAddress, token };
 }
 
-/*
+
 main()
     .then(() => process.exit(0))
     .catch((error) => {
         console.error(error)
         process.exit(1)
     })
-*/
+
 
 module.exports = {
   deployPancakeswapExchange
