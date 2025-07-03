@@ -42,9 +42,7 @@ graph TD
 2. **Set environment variables**
    ```bash
    # For both frontend and contracts
-   echo "VITE_SOLANA_URL=https://api.devnet.solana.com" >> .env
-   echo "VITE_NEON_CORE_API_RPC_URL=https://devnet.neonevm.org" >> .env
-   ```
+   
 
 3. **Deploy contracts and run frontend**
    ```bash
