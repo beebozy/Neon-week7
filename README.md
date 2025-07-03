@@ -57,9 +57,9 @@ graph TD
 
 | Contract | Address | Version | Description |
 |----------|---------|---------|-------------|
-| WNEON | `0x11adC2d986E334137b9ad0a0F290771F31e9517F` | v1 | Wrapped NEON token |
-| Factory | `0xe972AC3Bc587A9772B0E4C8236e815639ae842A7` | v2 | Pool creation |
-| Router | `0xBC60Eec776C91D44995E5763FEe4A2a7a14e2fFE` | v2 | Swap operations |
+| WNEON | `0x11adC2d986E334137b9ad0a0F290771F31e9517F` |  | Wrapped NEON token |
+| Factory | `0xe972AC3Bc587A9772B0E4C8236e815639ae842A7` |  | Pool creation |
+| Router | `0xBC60Eec776C91D44995E5763FEe4A2a7a14e2fFE` |  | Swap operations |
 | Token A | `0x748e0220746A11E55ecC938012AA555aE5a4366a` | v1 | Test ERC20ForSPL |
 | Token B | `0xbf980b326d4Ed7dF8933abab6eF5c22539132413` | v1 | Test ERC20ForSPL |
 | Token A v2 | `0x909eA1433ABc9e951132c850116053F1F1f0C77E` | v2 | Test ERC20ForSPLv2 |
