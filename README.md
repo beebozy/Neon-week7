@@ -1,185 +1,146 @@
-# Neon Solana Native Swap Demo
+# NeonSwap: Cross-Chain DeFi Protocol on Neon EVM
 
-A demonstration of token swaps in Neon EVM using Solana signature verification, showcasing how users with Solana wallets can interact with EVM smart contracts on Neon EVM.
+## 🌟 Introduction
+NeonSwap bridges Ethereum and Solana ecosystems through Neon EVM, enabling seamless token swaps between chains while maintaining Solana's speed and low fees. This demo showcases how Solana wallets can interact with EVM smart contracts.
 
-## About this Demo
 
-### Purpose
 
-This demo demonstrates that users with a Solana wallet can, through this SDK, interact with EVM smart contracts on the Neon EVM.
+## ✨ Key Features
 
-The demo showcases how to perform token swaps in Neon EVM via the Solana signer library, integrating Solana's native tokens and user base with Neon EVM's smart contract environment.
+| Feature | Description | Benefit |
+|---------|-------------|---------|
+| **Cross-Chain Swaps** | Trade between WNEON, SOL, USDC and more | Access both ecosystems |
+| **Solana Wallet Support** | Use Phantom/Backpack with EVM contracts | Familiar UX for Solana users |
+| **Gas Optimization** | Neon EVM's efficient execution | Lower fees than mainnet Ethereum |
+| **PancakeSwap Integration** | Battle-tested AMM infrastructure | Reliable swap mechanics |
+|**SOLANASDK FOR FRONTEND INTEGRATION** |React-based UI for performing token swaps|
 
-For more information, visit the [Solana Native documentation](https://neonevm.org/docs/composability/sdk_solana_native).
+## 🏗 Technical Architecture
 
-### How It Works
-
-The demo implements several key components:
-
-1. **Smart Contracts**: Deploys PancakeSwap exchange contracts on Neon EVM, including a factory and router
-2. **Token Creation**: Creates ERC20ForSPL tokens for testing purposes
-3. **Liquidity Pools**: Sets up liquidity pools for token pairs
-4. **Frontend Interface**: Provides a UI for performing token swaps
-5. **Proxy Server**: Handles cross-origin requests and other middleware functionality
-
-The process flow involves:
-- Creating scheduled Neon EVM transactions
-- Signing them with Solana wallet credentials
-- Submitting them to the Neon EVM network via Solana
-- Monitoring transaction status
-
-### Repository Structure
-
+```mermaid
+graph TD
+    A[User Wallet] --> B[React Frontend]
+    B --> C[Proxy Server]
+    C --> D[PancakeSwap Contracts]
+    D --> E[Neon EVM]
+    E --> F[Solana Blockchain]
+    F -->|Confirmation| B
 ```
-├── frontend
-│   └── swap-ui            # React-based UI for performing token swaps
-├── pancakeswap            # Scripts and configuration for PancakeSwap deployment
-│   ├── scripts            # Deployment and configuration scripts
-```
+
+## 🚀 Getting Started
 
 ### Prerequisites
+- Node.js v18+
+- Yarn 1.22+
+- Solana CLI 1.10+
+- Phantom Wallet extension
 
-- Node.js (v16+)
-- Yarn package manager
-- Solana CLI tools
-- A Solana wallet with SOL tokens (for devnet)
-- Basic understanding of:
-  - Solidity and EVM-compatible smart contracts
-  - Token swaps and liquidity pools
-  - Solana transaction model
+### ⚡ Quick Deployment
 
-## Getting Started
+1
 
-### Environment Setup
+2. **Set environment variables**
+   ```bash
+   # For both frontend and contracts
+   echo "VITE_SOLANA_URL=https://api.devnet.solana.com" >> .env
+   echo "VITE_NEON_CORE_API_RPC_URL=https://devnet.neonevm.org" >> .env
+   ```
 
-1. Clone the repository:
-```bash
-git clone https://github.com/neonlabsorg/neon-solana-native-swap-demo.git
-cd neon-solana-native-swap-demo
+3. **Deploy contracts and run frontend**
+   ```bash
+   # In one terminal:
+   cd pancakeswap && npm install && npx hardhat run scripts/file.js
+   
+   # In another terminal:
+   cd frontend/swap-ui && yarn && yarn dev
+   ```
+
+## 📜 Contract Reference (Devnet)
+
+| Contract | Address | Version | Description |
+|----------|---------|---------|-------------|
+| WNEON | `0x11adC2d986E334137b9ad0a0F290771F31e9517F` | v1 | Wrapped NEON token |
+| Factory | `0xe972AC3Bc587A9772B0E4C8236e815639ae842A7` | v2 | Pool creation |
+| Router | `0xBC60Eec776C91D44995E5763FEe4A2a7a14e2fFE` | v2 | Swap operations |
+| Token A | `0x748e0220746A11E55ecC938012AA555aE5a4366a` | v1 | Test ERC20ForSPL |
+| Token B | `0xbf980b326d4Ed7dF8933abab6eF5c22539132413` | v1 | Test ERC20ForSPL |
+| Token A v2 | `0x909eA1433ABc9e951132c850116053F1F1f0C77E` | v2 | Test ERC20ForSPLv2 |
+| Token B v2 | `0x748e0220746A11E55ecC938012AA555aE5a4366a` | v2 | Test ERC20ForSPLv2 |
+
+## 🔄 Transaction Lifecycle
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Proxy
+    participant Wallet
+    participant NeonEVM
+    participant Solana
+    
+    User->>Frontend: Initiate Swap
+    Frontend->>Proxy: Create EVM Transaction
+    Proxy->>Wallet: Sign Request
+    Wallet->>Proxy: Signed Transaction
+    Proxy->>NeonEVM: Execute Contract Call
+    NeonEVM->>Solana: Confirm Settlement
+    Solana->>Frontend: Transaction Receipt
+    Frontend->>User: Success Notification
 ```
 
-2. Configure environment variables:
+## 🛠 Customization Guide
 
-For the frontend:
-```bash
-cd frontend/swap-ui
-cp .env.example .env
-# Edit .env with your configuration
+### 1. Token Deployment
+```javascript
+// In pancakeswap/scripts/deploy-tokens.js
+await deployERC20ForSPLMintable(
+  'YOUR_TOKEN',          // Contract reference key
+  'Your Custom Token',   // Token name
+  'YCT',                 // Token symbol
+  9,                     // Decimals (max 9 for SPL compatibility)
+  deployer.address,      // Mint authority
+  'ERC20ForSplMintable'  // Contract version
+);
 ```
 
-For PancakeSwap deployment:
-```bash
-cd pancakeswap
-cp .env.example .env
-# Edit .env with your configuration
+### 2. Liquidity Pool Configuration
+```javascript
+// In create-liquidity-pools.js
+await createPairAndAddLiquidity(
+  factoryAddress,
+  routerAddress,
+  deployer,
+  tokenA, 
+  tokenB,
+  100000,  // Token A amount (18 decimals)
+  200000,  // Token B amount (9 decimals)
+  3000,    // LP fee basis points (0.3%)
+  true     // Stable pool flag
+);
 ```
 
-Key environment variables:
+## 🔒 Security Considerations
 
-```
-# Backend & Frontend
-VITE_PROXY_ENV: devnet
-VITE_SOLANA_URL: https://api.devnet.solana.com
-VITE_NEON_CORE_API_RPC_URL: https://devnet.neonevm.org
+### Audit Checklist
+1. [ ] Contract ownership verification
+2. [ ] Reentrancy guards
+3. [ ] Proper access controls
+4. [ ] Input validation
+5. [ ] Emergency stop mechanism
 
-# Wallet Private Keys (Never commit these to git!)
-VITE_SOLANA_WALLET: <your_solana_private_key_in_bs58>
-VITE_NEON_WALLET: <your_neon_private_key>
 
-# PancakeSwap Deployment
-DEPLOYER_KEY: <your_evm_private_key>
-SOLANA_WALLET: <your_solana_private_key_in_bs58>
-NEON_EVM_NODE: https://devnet.neonevm.org
-NEON_FAUCET: https://api.neonfaucet.org/request_neon
-SOLANA_RPC_NODE: https://api.devnet.solana.com
-```
 
-### Deployment
+## 📚 Resources
 
-#### Deploy Smart Contracts on Devnet
+### Documentation
+- [Neon EVM Docs](https://neon-evm.xyz/docs)
+- [Solana Program Library](https://spl.solana.com)
+- [PancakeSwap Contracts](https://docs.pancakeswap.finance/code/smart-contracts)
 
-1. Install dependencies:
-```bash
-cd pancakeswap
-npm install
-```
+### Tools
+- [NeonFaucet](https://neonfaucet.org)
 
-2. Run the PancakeSwap setup script for deploying all contracts:
-```bash
-npm run deploy
-npm run airdrop
-```
+- [NeonScan](https://neonscan.org)
 
-This script will:
-- Deploy WNEON contract
-- Deploy PancakeSwap exchange contracts (Factory and Router)
-- Deploy ERC20ForSPL tokens (both v1 and v2 variants)
-- Create token pairs and provide initial liquidity
-- Save all contract addresses to the artifacts folder
-
-For more PancakeSwap deployment details, see `/pancakeswap/README.md`.
-
-#### Build and Run the Frontend
-
-1. Install dependencies:
-```bash
-cd frontend/swap-ui
-yarn install
-```
-
-2. Start development server:
-```bash
-yarn dev
-```
-
-### Running the Demo
-
-1. Open the frontend application in your browser (typically at http://localhost:5173)
-2. Connect your Solana wallet (Phantom or another compatible wallet)
-3. Request tokens for testing:
-```bash
-cd pancakeswap
-npm run airdrop
-```
-
-This will mint test tokens and transfer them to your wallet.
-
-4. Use the swap interface to exchange tokens
-
-### Adapting for Your Own Use
-
-To adapt this demo for your own purposes:
-
-1. Replace token symbols and names in `pancakeswap/scripts/deploy-tokens.js`
-
-2. Modify the token amounts and liquidity pool configurations in `pancakeswap/scripts/create-liquidity-pools.js`
-
-3. Update the frontend UI in `frontend/swap-ui/src` to match your branding
-
-### Mainnet Deployment Considerations
-
-When deploying to mainnet:
-
-1. Update network configurations in `.env` files:
-   - Use mainnet RPC endpoints
-   - Remove faucet configurations
-
-2. Ensure sufficient SOL and NEON balances in deployment wallets
-
-3. Update hardhat configuration in `pancakeswap/hardhat.config.js` to use mainnet settings
-
-4. Implement proper error handling and transaction monitoring for production use
-
-5. Consider security audits for any contract modifications
-
-6. Implement proper key management (never store private keys in code or env files on production)
-
-## Additional Resources
-
-- [Solana Native SDK Documentation](https://neonevm.org/docs/composability/sdk_solana_native)
-- [Neon EVM Documentation](https://neonevm.org/docs/quick_start)
-- [Solana Documentation](https://solana.com/docs)
-
-## License
-
-MIT
+## ⚖️ License
+MIT Licensed - See [LICENSE](LICENSE) for details.
